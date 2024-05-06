@@ -10,7 +10,7 @@ import 'model/user.dart';
 
 class MyHomePage extends StatelessWidget {
   final User userLogin;
-  final String backgroundImage = 'clinic.jpg';
+  final String backgroundImage = 'longhotel.jpg';
 
   MyHomePage({required this.userLogin});
 
@@ -155,7 +155,7 @@ class MyHomePage extends StatelessWidget {
                             30), // Increase padding to increase button size
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ hai
@@ -172,7 +172,7 @@ class MyHomePage extends StatelessWidget {
                             30), // Increase padding to increase button size
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ hai

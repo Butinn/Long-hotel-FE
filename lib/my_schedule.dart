@@ -87,7 +87,7 @@ class _MySchedulePagePageState extends State<MySchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách lượt khám của tôi'),
+        title: Text('Danh sách phòng đặt của tôi'),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {

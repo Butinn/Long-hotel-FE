@@ -31,12 +31,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final String backgroundImage = 'HotelBG.jpg';
+
   late String _username;
   late String _password = "";
   late User _user;
   late User _userResponse = User.empty();
   late String _url = "10.145.12.230";
   bool HidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 50),
                 child: Image.asset(
-                  'assets/logo.jpg', // Đường dẫn đến tập tin logo
+                  'assets/hotelicon.png', // Đường dẫn đến tập tin logo
                   width: 200,
                   height: 200,
                 ),

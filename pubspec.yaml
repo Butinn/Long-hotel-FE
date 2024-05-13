@@ -58,6 +58,8 @@ flutter:
   assets:
     - assets/logo.jpg
     - assets/background.PNG
+    - assets/hotelicon.png
+    - assets/HotelBG.jpg
     - assets/clinic.jpg
     - assets/pkhamDakhoa.jpg
     - assets/longhotel.jpg

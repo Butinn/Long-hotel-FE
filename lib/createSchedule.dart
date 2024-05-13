@@ -50,7 +50,7 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đăng kí lịch khám'),
+        title: Text('Đặt phòng khách sạn'),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {
@@ -152,10 +152,10 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
                 Schedule schedule = Schedule(999, _fullname, _userId,
                     _phoneNumber, _note, _appointmentTime, "",1, 0);
                 print(_userId);
-                print('Đặt lịch với thông tin $schedule');
+                print('Đặt phòng với thông tin $schedule');
                 if (await doCreateSchedule()) {
                   final snackBar = SnackBar(
-                    content: Text('Đặt lịch thành công !'),
+                    content: Text('Đặt phòng thành công !'),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   Navigator.push(
@@ -168,12 +168,12 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
                   );
                 } else {
                   final snackBar = SnackBar(
-                    content: Text('Đặt lịch thất bại! Kiểm tra lại thông tin.'),
+                    content: Text('Đặt phòng thất bại! Kiểm tra lại thông tin.'),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               },
-              child: Text('Đăng kí lịch khám'),
+              child: Text('Đặt phòng'),
             ),
           ),
         ],

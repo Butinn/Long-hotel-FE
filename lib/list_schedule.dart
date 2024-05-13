@@ -72,7 +72,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách lịch khám'),
+        title: Text('Danh sách phòng'),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {

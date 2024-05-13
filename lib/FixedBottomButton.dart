@@ -40,7 +40,7 @@ class FixedBottomButton extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               fixedSize: Size.fromHeight(height),
-              primary: primaryColor,
+              //primary: primaryColor,
             ),
             onPressed: press,
             child: Row(

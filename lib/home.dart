@@ -122,7 +122,7 @@ class MyHomePage extends StatelessWidget {
                                   )),
                         );
                       },
-                      child: Text('Quản lý lịch khám'),
+                      child: Text('Quản lý phòng'),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.fromLTRB(35, 30, 35,
                             30), // Increase padding to increase button size
@@ -166,7 +166,7 @@ class MyHomePage extends StatelessWidget {
                                   CreateSchedule(user: userLogin)),
                         );
                       },
-                      child: Text('Tạo lịch khám'),
+                      child: Text('Đặt Phòng'),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.fromLTRB(55, 30, 55,
                             30), // Increase padding to increase button size
@@ -183,7 +183,7 @@ class MyHomePage extends StatelessWidget {
                                   MySchedulePage(userLogin: userLogin)),
                         );
                       },
-                      child: Text('Lịch khám của tôi'),
+                      child: Text('Kiểm tra phòng đặt'),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.fromLTRB(43, 30, 43,
                             30), // Increase padding to increase button size

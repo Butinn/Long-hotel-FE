@@ -9,21 +9,27 @@ import 'package:my_app/model/user.dart';
 class UserDetailsScreen extends StatelessWidget {
   final User user;
   final User userLogin;
-  final String backgroundImage = 'background.PNG';
+  final String backgroundImage = 'assets/background.jpg';
   UserDetailsScreen({required this.user, required this.userLogin});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chi tiết người dùng'),
+        backgroundColor: Colors.green, // Set your desired background color here
+        title: Text('Chi tiết người dùng',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.white
+            )
+        ),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => MyHomePage(userLogin: userLogin)),
+              MaterialPageRoute(builder: (context) => MyHomePage(userLogin: userLogin)),
             );
           },
         ),
@@ -35,96 +41,111 @@ class UserDetailsScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40,80,8,8),
-              child: Text(
-                'ID: ${user.id}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.normal,
-                ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 40),
+              Image.asset(
+                'assets/avatar.jpg', // Provide your image path here
+                width: 200, // Adjust width as needed
+                height: 200, // Adjust height as needed
               ),
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40,8,8,8),
-              child: Text(
-                'Họ tên: ${user.fullname}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40,8,8,8),
-              child: Text(
-                'Email: ${user.email}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40,8,8,8),
-              child: Text(
-                'Số điện thoại: ${user.phone_number}',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Row(
+              buildDetailItem('ID', '${user.id}'),
+              buildDetailItem('Họ tên', '${user.fullname}'),
+              buildDetailItem('Email', '${user.email}'),
+              buildDetailItem('Số điện thoại', '${user.phone_number}'),
+              SizedBox(height: 40),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Chuyển sang trang cập nhật thông tin người dùng
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserEditScreen(
-                              userDetail: user,
-                              userLogin: userLogin,
-                            ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Chuyển sang trang cập nhật thông tin người dùng
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserEditScreen(
+                            userDetail: user,
+                            userLogin: userLogin,
                           ),
-                        );
-                      },
-                      child: Text('Sửa'),
+                        ),
+                      );
+                    },
+                    child: Text('Sửa'),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.orange, // Text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Button padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Button border radius
+                      ),
                     ),
                   ),
-                  SizedBox(width: 8.0),
+                  SizedBox(width: 20),
                   Visibility(
                     visible: userLogin.userType == 1,
-                    // true: hiển thị widget, false: ẩn widget
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Xử lý khi nhấn nút Xóa
-                          _deleteUser(context);
-                        },
-                        child: Text('Xóa'),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Xử lý khi nhấn nút Xóa
+                        _deleteUser(context);
+                      },
+                      child: Text('Xóa'),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white, backgroundColor: Colors.red, // Text color
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15), // Button padding
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Button border radius
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget buildDetailItem(String label, String value) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey[800],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -178,7 +199,7 @@ class UserDetailsScreen extends StatelessWidget {
   }
 
   Future<void> deleteUser(int userId, BuildContext context) async {
-    final url = 'http://localhost:8080/api/user/delete/$userId';
+    final url = 'http://192.168.0.143:8080/api/user/delete/$userId';
 
     final headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

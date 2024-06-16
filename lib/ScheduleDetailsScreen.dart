@@ -154,8 +154,8 @@ class ScheduleDetailsScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Xóa lịch khám'),
-          content: Text('Bạn có chắc chắn muốn xóa lượt khám này?'),
+          title: Text('Xóa Phòng'),
+          content: Text('Bạn có chắc chắn muốn xóa phòng này?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -195,12 +195,10 @@ class ScheduleDetailsScreen extends StatelessWidget {
 
   Future<void> deleteSchedule(int scheduleId, BuildContext context) async {
     final url =
-        'http://localhost:8080/api/schedule/xoa-lich-kham/$scheduleId';
-
+        'http://192.168.0.143:8080/api/schedule/xoa-lich-kham/$scheduleId';
     final headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     };
-
     final response = await http.delete(Uri.parse(url), headers: headers);
     if (response.statusCode == 200) {
       // Nếu kết quả trả về thành công

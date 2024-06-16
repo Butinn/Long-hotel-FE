@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/RoomCreate.dart';
 import 'package:my_app/UserDetailsScreen.dart';
 import 'package:my_app/createSchedule.dart';
 import 'package:my_app/list_schedule.dart';
@@ -10,7 +11,7 @@ import 'model/user.dart';
 
 class MyHomePage extends StatelessWidget {
   final User userLogin;
-  final String backgroundImage = 'longhotel.jpg';
+  final String backgroundImage = 'assets/background.jpg';
 
   MyHomePage({required this.userLogin});
 
@@ -19,8 +20,14 @@ class MyHomePage extends StatelessWidget {
     String fullname = userLogin.fullname;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green, // Set your desired background color here
         title: Text('Trang chủ',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.white
+            )
+        ),
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
@@ -35,49 +42,6 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      // drawer: Drawer(
-      //   child: ListView(
-      //     padding: EdgeInsets.zero,
-      //     children: <Widget>[
-      //       DrawerHeader(
-      //         decoration: BoxDecoration(
-      //           color: Colors.blue,
-      //         ),
-      //         child: Text(
-      //           'Menu',
-      //           style: TextStyle(
-      //             color: Colors.white,
-      //             fontSize: 24,
-      //           ),
-      //         ),
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.home),
-      //         title: Text('Home'),
-      //         onTap: () {
-      //           // Xử lý sự kiện khi nhấn vào mục Home
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.settings),
-      //         title: Text('Settings'),
-      //         onTap: () {
-      //           // Xử lý sự kiện khi nhấn vào mục Settings
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.info),
-      //         title: Text('About'),
-      //         onTap: () {
-      //           // Xử lý sự kiện khi nhấn vào mục About
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -87,27 +51,51 @@ class MyHomePage extends StatelessWidget {
         ),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Visibility(
                 visible: userLogin.userType == 1,
                 // true: hiển thị widget, false: ẩn widget
                 child: Column(
                   children: [
+                    SizedBox(height: 100),
+                    Image.asset(
+                      'assets/longicon.png', // Provide your image path here
+                      width: 200, // Adjust width as needed
+                      height: 200, // Adjust height as needed
+                    ),
+                    SizedBox(height: 80),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ nhất
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  UserListPage(userLogin: userLogin)),
+                            builder: (context) =>
+                                UserListPage(userLogin: userLogin),
+                          ),
                         );
                       },
-                      child: Text('Quản lý người dùng'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(30, 30, 30,
-                            30), // Increase padding to increase button size
+                      child: Text(
+                        'Quản lý người dùng',
+                        style: TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.green), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -122,10 +110,61 @@ class MyHomePage extends StatelessWidget {
                                   )),
                         );
                       },
-                      child: Text('Quản lý phòng'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(35, 30, 35,
-                            30), // Increase padding to increase button size
+                      child: Text(
+                        'Quản lý phòng',
+                        style: TextStyle(
+                          color: Colors.black, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.lightGreenAccent), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Xử lý khi nhấn nút bấm thứ hai
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RoomCreate(
+                              userLogin: userLogin,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Thêm phòng',
+                        style: TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.green), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
                       ),
                     ),
                   ],
@@ -136,6 +175,13 @@ class MyHomePage extends StatelessWidget {
                 // true: hiển thị widget, false: ẩn widget
                 child: Column(
                   children: [
+                    SizedBox(height: 100),
+                    Image.asset(
+                      'assets/longicon.png', // Provide your image path here
+                      width: 200, // Adjust width as needed
+                      height: 200, // Adjust height as needed
+                    ),
+                    SizedBox(height: 80),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ nhất
@@ -149,30 +195,63 @@ class MyHomePage extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('Xem thông tin cá nhân'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(30, 30, 30,
-                            30), // Increase padding to increase button size
+                      child: Text(
+                        'Xem thông tin cá nhân',
+                        style: TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.green), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
                       ),
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ hai
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateSchedule(user: userLogin)),
+                              builder: (context) => ScheduleListPage(
+                                userLogin: userLogin,
+                              )),
                         );
                       },
-                      child: Text('Đặt Phòng'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(55, 30, 55,
-                            30), // Increase padding to increase button size
+                      child: Text(
+                        'Đặt phòng',
+                        style: TextStyle(
+                          color: Colors.black, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.lightGreenAccent), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
                       ),
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         // Xử lý khi nhấn nút bấm thứ hai
@@ -183,10 +262,26 @@ class MyHomePage extends StatelessWidget {
                                   MySchedulePage(userLogin: userLogin)),
                         );
                       },
-                      child: Text('Kiểm tra phòng đặt'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(43, 30, 43,
-                            30), // Increase padding to increase button size
+                      child: Text(
+                        'Kiểm tra đặt phòng',
+                        style: TextStyle(
+                          color: Colors.white, // Text color
+                          fontSize: 18, // Font size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                        backgroundColor: MaterialStateProperty.all(Colors.green), // Background color
+                        elevation: MaterialStateProperty.all(5), // Elevation
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25), // Button border radius
+                          ),
+                        ),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        ),
                       ),
                     ),
                   ],

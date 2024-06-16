@@ -32,7 +32,7 @@ class _UserListPageState extends State<UserListPage> {
 
   void _getUsers() async {
     final response = await http
-        .get(Uri.parse('http://localhost:8080/api/user/get-all-user'));
+        .get(Uri.parse('http://192.168.0.143:8080/api/user/get-all-user'));
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     setState(() {
       _users = (jsonData as List).map((user) => User.fromJson(user)).toList();
@@ -55,7 +55,14 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách người dùng'),
+        backgroundColor: Colors.green, // Set your desired background color here
+        title: Text('Danh sách người dùng',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.white
+            )
+        ),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {

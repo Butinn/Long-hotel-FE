@@ -25,11 +25,27 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đăng kí'),
+        backgroundColor: Colors.green, // Set your desired background color here
+        title: Text(
+          'Đăng kí',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Colors.white,
+          ),
+        ),
       ),
-      body: Column(
-        children: [
-          InputText(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background.jpg'), // Replace with your hotel-themed background image path
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            InputText(
               errorText: "",
               hintText: "Tên đăng nhập",
               labelText: "Nhập tên đăng nhập",
@@ -38,8 +54,10 @@ class _SignupPageState extends State<SignupPage> {
                 setState(() {
                   _username = value;
                 });
-              }),
-          InputText(
+              },
+            ),
+            SizedBox(height: 20),
+            InputText(
               errorText: "",
               hintText: "Họ tên",
               labelText: "Nhập họ tên",
@@ -48,8 +66,10 @@ class _SignupPageState extends State<SignupPage> {
                 setState(() {
                   _fullname = value;
                 });
-              }),
-          InputText(
+              },
+            ),
+            SizedBox(height: 20),
+            InputText(
               errorText: "",
               hintText: "Email",
               labelText: "Nhập email",
@@ -58,8 +78,10 @@ class _SignupPageState extends State<SignupPage> {
                 setState(() {
                   _email = value;
                 });
-              }),
-          InputText(
+              },
+            ),
+            SizedBox(height: 20),
+            InputText(
               errorText: "",
               hintText: "Mật khẩu",
               labelText: "Nhập mật khẩu",
@@ -68,8 +90,10 @@ class _SignupPageState extends State<SignupPage> {
                 setState(() {
                   _password = value;
                 });
-              }),
-          InputText(
+              },
+            ),
+            SizedBox(height: 20),
+            InputText(
               errorText: "",
               hintText: "Số điện thoại",
               labelText: "Nhập số điện thoại",
@@ -78,58 +102,75 @@ class _SignupPageState extends State<SignupPage> {
                 setState(() {
                   _phoneNumber = value;
                 });
-              }),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(10), // Bo góc của button
+              },
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  // Xử lý đăng kí
+                  User user = User(
+                      999, "", _password, _fullname, _email, _phoneNumber, 1);
+                  print('Đăng kí với thông tin $user');
+                  if (await doRegister(
+                      _username, _password, _fullname, _email, _phoneNumber, "0")) {
+                    final snackBar = SnackBar(
+                      content: Text('Đăng kí thành công !'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(userLogin: _user),
+                      ),
+                    );
+                  } else {
+                    final snackBar = SnackBar(
+                      content: Text('Đăng kí thất bại ! Kiểm tra lại thông tin.'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
+                child: Text(
+                  'Đăng kí',
+                  style: TextStyle(
+                    color: Colors.white, // Text color
+                    fontSize: 18, // Font size
+                    fontWeight: FontWeight.bold, // Font weight
+                  ),
+
+                ),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size(300, 50)), // Set minimum size
+                  backgroundColor: MaterialStateProperty.all(Colors.green), // Background color
+                  elevation: MaterialStateProperty.all(5), // Elevation
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25), // Button border radius
+                    ),
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
                   ),
                 ),
-                minimumSize: MaterialStateProperty.all<Size>(
-                  Size.fromHeight(50), // Chiều cao của button
-                ),
               ),
-              onPressed: () async {
-                // Xử lý đăng kí
-                User user = User(
-                    999, "", _password, _fullname, _email, _phoneNumber, 1);
-                print('Đăng kí với thông tin $user');
-                if (await doRegister(_username, _password, _fullname, _email,
-                    _phoneNumber, "0")) {
-                  final snackBar = SnackBar(
-                    content: Text('Đăng kí thành công !'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyHomePage(userLogin: _user)),
-                  );
-                } else {
-                  final snackBar = SnackBar(
-                    content: Text('Đăng kí thất bại ! Kiểm tra lại thông tin.'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              child: Text('Đăng kí'),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              // Chuyển đến trang đăng nhập
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-            child: Text('Đăng nhập'),
-          ),
-        ],
+            TextButton(
+              onPressed: () {
+                // Chuyển đến trang đăng nhập
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: Text(
+                'Đăng nhập',
+                style: TextStyle(color: Colors.green),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -137,7 +178,7 @@ class _SignupPageState extends State<SignupPage> {
   Future<bool> doRegister(String username, String password, String fullname,
       String email, String phoneNumber, String userType) async {
     final response = await http.post(
-      Uri.parse('http://localhost:8080/api/user/register'),
+      Uri.parse('http://192.168.0.143:8080/api/user/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

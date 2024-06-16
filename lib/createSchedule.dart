@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:my_app/CustomDropDown.dart';
 import 'package:my_app/InputText.dart';
 import 'package:my_app/home.dart';
+import 'package:my_app/model/room.dart';
 import 'package:my_app/model/schedule.dart';
 import 'package:my_app/model/user.dart';
 import 'package:my_app/primaryThemeColor.dart';
@@ -40,11 +41,18 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
   ];
   List<int> listTimeSlot=[1];
 
+  List<Room> listRoom = [];
 
   // var formatDate = intl.DateFormat('dd/MM/yyyy');
   var formatDate = intl.DateFormat('yyyy-MM-dd');
 
   _CreateSchedulePageState({required this.user});
+
+  @override
+  void initState() {
+    super.initState();
+    getListRoom();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +72,6 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
       ),
       body: Column(
         children: [
-          // TextField(
-          //   onChanged: (value) {
-          //     setState(() {
-          //       _fullname = value;
-          //     });
-          //   },
-          //   decoration: InputDecoration(
-          //     labelText: 'Họ và tên',
-          //     hintText: 'Nhập họ và tên',
-          //   ),
-          // ),
           InputText(
               errorText: "",
               hintText: "Nhập họ và tên",
@@ -95,6 +92,7 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
                   _phoneNumber = value;
                 });
               }),
+
           InputText(
               errorText: "",
               hintText: "Ghi chú",
@@ -105,45 +103,6 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
                   _note = value;
                 });
               }),
-
-
-          CustomDropDown(
-            title: 'Thời điểm',
-            value: _appointmentTime,
-            isError: true,
-            errorText: '',
-            icon: Icons.date_range_outlined,
-            onPress: () {
-              showNgay(_appointmentTime);
-            },
-          ),
-            Visibility(
-              visible: _appointmentTime != null && _appointmentTime !="" && _selectedTimeSlot != null && _selectedTimeSlot != "",
-            child: InputText(
-                isEnable:_selectedTimeSlot == null || _selectedTimeSlot == "",
-                errorText: "",
-                hintText: _selectedTimeSlot,
-                labelText: "Khung giờ",
-                value: "",
-                ),
-          ),
-
-          InkWell(
-            onTap: () {
-              if (_appointmentTime != null && _appointmentTime !="") {
-                showTimeSlots(_appointmentTime);
-              } else {
-                // Hiển thị thông báo lỗi nếu chưa chọn ngày
-                print('Vui lòng chọn ngày trước.');
-              }
-            },
-            child: Text(
-              'Chọn khung giờ',
-              style: TextStyle(
-                  color: Colors.green, fontSize: 16
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,30,0,0),
             child: ElevatedButton(
@@ -183,7 +142,7 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
   void getListTimeSlot(String ngayHen) async {
     print(ngayHen.toString()+"...................");
     final response = await http
-        .get(Uri.parse('http://localhost:8080/api/schedule?ngayHen=$ngayHen'));
+        .get(Uri.parse('http://192.168.0.143:8080/api/schedule?ngayHen=$ngayHen'));
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     final List<dynamic> jsonList = jsonData as List<dynamic>;
     final List<int> numberList = jsonList.map((json) => json as int).toList();
@@ -267,17 +226,71 @@ class _CreateSchedulePageState extends State<CreateSchedule> {
     //   'note': _note,
     //   'appointmentTime': _appointmentTime,
     // };
-    // final uri = Uri.https('localhost:8080', '/api/schedule/dat-lich-kham', queryParameters);
+    // final uri = Uri.https('192.168.0.143:8080', '/api/schedule/dat-lich-kham', queryParameters);
     //
     // final response = await http.post(uri);
     final response = await http.post(
       Uri.parse(
-          'http://localhost:8080/api/schedule/dat-lich-kham?userId=$_userId&fullname=$_fullname&phoneNumber=$_phoneNumber&note=$_note&appointmentTime=$_appointmentTime&timeSlot=$_timeSlot'),
+          'http://192.168.0.143:8080/api/schedule/dat-lich-kham?userId=$_userId&fullname=$_fullname&phoneNumber=$_phoneNumber&note=$_note&appointmentTime=$_appointmentTime&timeSlot=$_timeSlot'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
     print('${response.statusCode}');
     return (response.statusCode == 200);
+  }
+
+  void getListRoom() async {
+    print("lmao");
+    final response = await http
+        .get(Uri.parse('http://192.168.0.143:8080/api/room/get-all-room'));
+    //final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    final List<dynamic> jsonList = json.decode(response.body);
+    final List<Room> roomList = jsonList.map((json) => Room.fromJson(json)).toList();
+    setState(() {
+      listRoom = roomList;
+      print(roomList);
+    });
+  }
+
+  void _showListRoom(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Chọn Phòng'),
+          content: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 5,
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
+            ),
+            itemCount: 25,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildIcon(Icons.house_outlined); // You can change the icon here
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildIcon(IconData iconData) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(iconData, size: 40),
+        SizedBox(height: 8),
+        Text('Icon'),
+      ],
+    );
   }
 }

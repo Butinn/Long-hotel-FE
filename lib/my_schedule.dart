@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_app/ScheduleDetailsScreen.dart';
+import 'package:my_app/AppointmentDetailScreen.dart';
 import 'package:my_app/home.dart';
-import 'package:my_app/model/schedule.dart';
+import 'package:my_app/model/appointment.dart';
 import 'package:my_app/model/user.dart';
+import 'model/room.dart';
 
 class MySchedulePage extends StatefulWidget {
   final User userLogin;
@@ -18,9 +19,10 @@ class MySchedulePage extends StatefulWidget {
 }
 
 class _MySchedulePagePageState extends State<MySchedulePage> {
-  List<Schedule> _schedules = [];
+  List<Appointment> _appointments = [];
   String _searchText = '';
   final User user;
+  List<Room> _roomList = [];
   final String backgroundImage = 'background.PNG';
 
   _MySchedulePagePageState({required this.user});
@@ -34,60 +36,50 @@ class _MySchedulePagePageState extends State<MySchedulePage> {
   void _getSchedules() async {
     int userId = user.id;
     final response = await http.get(Uri.parse(
-        'http://localhost:8080/api/schedule/my-schedule?userId=$userId'));
+        'http://192.168.0.143:8080/api/appointment/get-appointment-by-userid-and-status/$userId/0'));
     final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     setState(() {
-      _schedules = (jsonData as List)
-          .map((schedule) => Schedule.fromJson(schedule))
+      _appointments = (jsonData as List)
+          .map((data) => Appointment.fromJson(data))
           .toList();
     });
   }
 
-  List<Schedule> get filteredSchedules {
+  List<Appointment> get filteredSchedules {
     if (_searchText.isEmpty) {
-      return _schedules;
+      return _appointments;
     } else {
-      return _schedules
+      return _appointments
           .where((schedule) =>
-              schedule.fullname.contains(_searchText) ||
-              schedule.phoneNumber.contains(_searchText))
+              schedule.room_number.contains(_searchText))
           .toList();
     }
   }
 
+  Future<bool> _getListRoomSingle(String roomNumber) async {
+    final response = await http
+        .get(Uri.parse('http://192.168.0.143:8080/api/room/get-room/$roomNumber/1'));
+    final jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    setState(() {
+      _roomList = (jsonData as List)
+          .map((schedule) => Room.fromJson(schedule))
+          .toList();
+    });
+    return (response.statusCode == 200);
+  }
+
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Danh sách lượt khám của tôi'),
-  //     ),
-  //     body: ListView.builder(
-  //       itemCount: _schedules.length,
-  //       itemBuilder: (context, index) {
-  //         return ListTile(
-  //           title: Text(_schedules[index].phoneNumber),
-  //           subtitle: Text(_schedules[index].note),
-  //           trailing: Icon(Icons.arrow_forward),
-  //           onTap: () {
-  //             // Điều hướng đến trang chi tiết lịch
-  //
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                 builder: (context) =>
-  //                     ScheduleDetailsScreen(schedule: _schedules[index]),
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách phòng đặt của tôi'),
+        backgroundColor: Colors.green, // Set your desired background color here
+        title: Text('Danh sách phòng đặt của tôi',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.white
+            )
+        ),
         leading: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {
@@ -107,7 +99,7 @@ class _MySchedulePagePageState extends State<MySchedulePage> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Tìm kiếm theo tên',
+                  hintText: 'Tìm kiếm theo số phòng',
                   suffixIcon: Icon(Icons.search),
                 ),
                 onChanged: (value) {
@@ -118,48 +110,42 @@ class _MySchedulePagePageState extends State<MySchedulePage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredSchedules.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      filteredSchedules[index].fullname,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+              child: SizedBox(
+                height: 500, // Set your desired height
+                child: ListView.builder(
+                  itemCount: filteredSchedules.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: Container(
+                        width: 68,
+                        height: 200,
+                        child: CircleAvatar(
+                          child: Icon(Icons.house),
+                        ),
                       ),
-                    ),
-                    subtitle: Text("Ngày hẹn: " +
-                        filteredSchedules[index].appointmentTime),
-                    // trailing: Icon(Icons.arrow_forward),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ScheduleDetailsScreen(
-                            schedule: filteredSchedules[index],
-                            userLogin: user,
-                          ),
+                      title: Text(
+                        "Phòng " + filteredSchedules[index].room_number,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          filteredSchedules[index].status == 1
-                              ? 'Đã xác nhận'
-                              : 'Chưa xác nhận',
-                          style: TextStyle(
-                            color: filteredSchedules[index].status == 1
-                                ? Colors.green
-                                : Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                      onTap: () async {
+                        if (await _getListRoomSingle(filteredSchedules[index].room_number)){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppointmentDetailScreen(
+                                appointmentCurrent: filteredSchedules[index],
+                                userLogin: user,
+                                room: _roomList[0],
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],

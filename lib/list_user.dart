@@ -80,7 +80,7 @@ class _UserListPageState extends State<UserListPage> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Tìm kiếm theo số điện thoại hoặc ghi chú',
+                hintText: 'Tìm kiếm theo số điện thoại hoặc tên',
                 suffixIcon: Icon(Icons.search),
               ),
               onChanged: (value) {

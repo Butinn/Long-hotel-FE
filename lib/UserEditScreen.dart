@@ -46,7 +46,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
           'Cập nhập thông tin người dùng',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 30,
+            fontSize: 20,
             color: Colors.white,
           ),
         ),
@@ -127,7 +127,7 @@ class _UserEditScreenState extends State<UserEditScreen> {
                     ),
                     SizedBox(height: 20),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(80, 30, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(40, 30, 0, 0),
                       child: ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
